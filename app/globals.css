@@ -1,0 +1,984 @@
+@import "tailwindcss";
+@import "locomotive-scroll/dist/locomotive-scroll.css";
+
+/* ==========================================================================
+   BAITHAK — warm editorial system
+
+   Canvas is parchment, content sits on white or linen cards with a 1px
+   hairline border, and a single honey accent marks the one primary action
+   in a viewport. No shadows, no decorative fills, no second accent colour.
+
+   Every colour, size and radius used by a component is declared here.
+   Components never hardcode a hex value.
+   ========================================================================== */
+
+:root {
+  /* --- palette --------------------------------------------------------- */
+  --ink: #121718;
+  --paper: #ffffff;
+  --linen: #f6f3ef;
+  --parchment: #e4e0dd;
+  --graphite: #2f2f2f;
+  --slate: #444444;
+  --honey: #ffcd6d;
+  --honey-deep: #f2bc55;
+  --apricot: #ffe2aa;
+
+  /* ink at reduced opacity: hairlines, muted text, quiet hover fills */
+  --ink-08: rgba(18, 23, 24, 0.08);
+  --ink-16: rgba(18, 23, 24, 0.16);
+  --ink-40: rgba(18, 23, 24, 0.4);
+  --ink-60: rgba(18, 23, 24, 0.62);
+  --paper-60: rgba(255, 255, 255, 0.62);
+  --paper-16: rgba(255, 255, 255, 0.16);
+
+  /* --- surfaces -------------------------------------------------------- */
+  --surface-canvas: var(--parchment);
+  --surface-card: var(--paper);
+  --surface-soft: var(--linen);
+  --surface-inverse: var(--graphite);
+  --surface-accent-soft: var(--apricot);
+  --surface-action: var(--honey);
+
+  /* --- type ------------------------------------------------------------ */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+
+  --text-caption: 12px;
+  --leading-caption: 1.4;
+  --tracking-caption: -0.03px;
+
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.35;
+  --tracking-body-sm: -0.05px;
+
+  --text-body: 16px;
+  --leading-body: 1.4;
+  --tracking-body: -0.05px;
+
+  --text-subheading: 18px;
+  --leading-subheading: 1.35;
+  --tracking-subheading: -0.05px;
+
+  --text-heading-sm: 24px;
+  --leading-heading-sm: 1.24;
+  --tracking-heading-sm: -0.17px;
+
+  --text-heading: 32px;
+  --leading-heading: 1.2;
+  --tracking-heading: -0.38px;
+
+  --text-title: 43px;
+  --text-title-mobile: 32px;
+  --leading-title: 1.16;
+  --tracking-title: -0.86px;
+  --tracking-title-mobile: -0.6px;
+
+  --text-display: 76px;
+  --text-display-mobile: 44px;
+  --leading-display: 1.02;
+  --tracking-display: -2.28px;
+  --tracking-display-mobile: -1.2px;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-bold: 700;
+
+  /* --- spacing (4px base) ---------------------------------------------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-9: 36px;
+  --space-10: 48px;
+  --space-12: 64px;
+  --space-18: 72px;
+  --space-19: 80px;
+  --space-25: 96px;
+
+  /* --- radius ----------------------------------------------------------- */
+  --radius-tiny: 4px;
+  --radius-sm: 8px;
+  --radius-card: 12px;
+  --radius-round: 9999px;
+
+  /* --- layout ----------------------------------------------------------- */
+  --page-max-width: 1200px;
+  --page-gutter: 16px;
+  --reading-max-width: 720px;
+  --nav-height: 64px;
+  --section-gap: 64px;
+  --card-padding: var(--space-6);
+
+  /* --- motion ----------------------------------------------------------- */
+  --ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-exit: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 160ms;
+  --duration-base: 500ms;
+  --duration-slow: 900ms;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --page-gutter: 32px;
+    --section-gap: 80px;
+    --card-padding: var(--space-8);
+  }
+}
+
+@theme {
+  --color-ink: #121718;
+  --color-paper: #ffffff;
+  --color-linen: #f6f3ef;
+  --color-parchment: #e4e0dd;
+  --color-graphite: #2f2f2f;
+  --color-slate: #444444;
+  --color-honey: #ffcd6d;
+  --color-honey-deep: #f2bc55;
+  --color-apricot: #ffe2aa;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+
+  --radius-card: 12px;
+}
+
+/* ==========================================================================
+   BASE
+   ========================================================================== */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: var(--space-6);
+    scroll-behavior: auto;
+  }
+
+  body {
+    min-height: 100dvh;
+    background-color: var(--surface-canvas);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-weight: var(--weight-regular);
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    letter-spacing: var(--tracking-body);
+    overflow-wrap: break-word;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "ss01" on, "cv11" on;
+  }
+
+  img,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: none;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  ul,
+  ol {
+    list-style: none;
+  }
+
+  summary {
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ::selection {
+    background-color: var(--apricot);
+    color: var(--ink);
+  }
+}
+
+/* ==========================================================================
+   TYPE
+   One family, two voices: tight display sizes and quiet body sizes.
+   ========================================================================== */
+
+@layer components {
+  .t-display {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-display-mobile);
+    line-height: var(--leading-display);
+    letter-spacing: var(--tracking-display-mobile);
+    text-wrap: balance;
+  }
+
+  .t-title {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-title-mobile);
+    line-height: var(--leading-title);
+    letter-spacing: var(--tracking-title-mobile);
+    text-wrap: balance;
+  }
+
+  .t-heading {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-medium);
+    font-size: 28px;
+    line-height: var(--leading-heading);
+    letter-spacing: var(--tracking-heading);
+    text-wrap: balance;
+  }
+
+  .t-heading-sm {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-heading-sm);
+    line-height: var(--leading-heading-sm);
+    letter-spacing: var(--tracking-heading-sm);
+  }
+
+  .t-subheading {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-subheading);
+    line-height: var(--leading-subheading);
+    letter-spacing: var(--tracking-subheading);
+  }
+
+  .t-body {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-regular);
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    letter-spacing: var(--tracking-body);
+  }
+
+  .t-body-lg {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-regular);
+    font-size: 18px;
+    line-height: 1.45;
+    letter-spacing: -0.05px;
+  }
+
+  .t-body-sm {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-regular);
+    font-size: var(--text-body-sm);
+    line-height: var(--leading-body-sm);
+    letter-spacing: var(--tracking-body-sm);
+  }
+
+  /* 12px metadata: eyebrows, dates, counts */
+  .t-caption {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-caption);
+    line-height: var(--leading-caption);
+    letter-spacing: var(--tracking-caption);
+  }
+
+  /* 12px form labels */
+  .t-label {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-caption);
+    line-height: var(--leading-caption);
+    letter-spacing: var(--tracking-caption);
+  }
+
+  /* 14px readable meta: owners, due dates, footer links */
+  .t-small {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-regular);
+    font-size: var(--text-body-sm);
+    line-height: var(--leading-body-sm);
+    letter-spacing: var(--tracking-body-sm);
+  }
+
+  /* 15px navigation */
+  .t-chrome {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-regular);
+    font-size: 15px;
+    line-height: 1.35;
+    letter-spacing: -0.05px;
+  }
+
+  /* timestamps: tabular figures so the column never jitters */
+  .t-mono {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-caption);
+    line-height: var(--leading-caption);
+    letter-spacing: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (min-width: 768px) {
+    .t-display {
+      font-size: var(--text-display);
+      letter-spacing: var(--tracking-display);
+    }
+
+    .t-title {
+      font-size: var(--text-title);
+      letter-spacing: var(--tracking-title);
+    }
+
+    .t-heading {
+      font-size: var(--text-heading);
+    }
+  }
+
+  /* Muted copy is Slate, never a lightened Ink. Slate clears 7:1 on the
+     parchment canvas and 9:1 on white, so it stays readable at 14px. */
+  .text-muted,
+  .text-recede,
+  .text-soft {
+    color: var(--slate);
+  }
+
+  .text-invert {
+    color: var(--paper);
+  }
+
+  .text-invert-muted {
+    color: var(--paper-60);
+  }
+
+  /* ==========================================================================
+     LAYOUT
+     ========================================================================== */
+
+  .shell {
+    width: 100%;
+    max-width: var(--page-max-width);
+    margin-inline: auto;
+    padding-inline: var(--page-gutter);
+  }
+
+  .reading {
+    width: 100%;
+    max-width: var(--reading-max-width);
+  }
+
+  .page {
+    flex: 1;
+    padding-bottom: var(--section-gap);
+  }
+
+  /* ==========================================================================
+     FOCUS
+     ========================================================================== */
+
+  :where(a, button, input, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  .skip-link {
+    position: absolute;
+    top: var(--space-2);
+    left: var(--space-2);
+    z-index: 60;
+    padding: var(--space-2) var(--space-4);
+    background-color: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    border-radius: var(--radius-card);
+    transform: translateY(-200%);
+    transition: transform 150ms var(--ease-enter);
+  }
+
+  .skip-link:focus-visible {
+    transform: none;
+  }
+
+  /* ==========================================================================
+     LINKS
+     ========================================================================== */
+
+  .link-underline {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: text-decoration-thickness 150ms var(--ease-enter);
+  }
+
+  .link-underline:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  /* ==========================================================================
+     NAVIGATION — a white bar floating on the parchment canvas
+     ========================================================================== */
+
+  .nav-bar {
+    background-color: var(--paper);
+    border: 1px solid var(--ink-08);
+    border-radius: var(--radius-card);
+    min-height: var(--nav-height);
+  }
+
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-card);
+    font-family: var(--font-sans);
+    font-weight: var(--weight-regular);
+    font-size: 15px;
+    line-height: 1.35;
+    letter-spacing: -0.05px;
+    color: var(--ink);
+    transition: background-color 150ms var(--ease-enter);
+  }
+
+  .nav-link:hover {
+    background-color: var(--parchment);
+  }
+
+  .nav-link[aria-current="page"] {
+    background-color: var(--linen);
+    font-weight: var(--weight-medium);
+  }
+
+  /* ==========================================================================
+     BUTTONS — 12px corners, no shadow, one honey action per viewport
+     ========================================================================== */
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: 44px;
+    padding: 10px 20px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-card);
+    font-family: var(--font-sans);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-body);
+    line-height: 1.35;
+    letter-spacing: var(--tracking-body);
+    white-space: nowrap;
+    text-align: center;
+    transition: background-color var(--duration-fast) var(--ease-enter),
+      border-color var(--duration-fast) var(--ease-enter),
+      color var(--duration-fast) var(--ease-enter);
+  }
+
+  .btn-primary {
+    background-color: var(--honey);
+    color: var(--ink);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--honey-deep);
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--ink);
+    border-color: var(--ink);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--linen);
+  }
+
+  .btn-dark {
+    background-color: var(--graphite);
+    color: var(--paper);
+    border-color: var(--graphite);
+  }
+
+  .btn-dark:hover {
+    background-color: #3a3a3a;
+    border-color: #3a3a3a;
+  }
+
+  .btn-outline-invert {
+    background-color: transparent;
+    color: var(--paper);
+    border-color: var(--paper-16);
+  }
+
+  .btn-outline-invert:hover {
+    background-color: var(--paper);
+    color: var(--ink);
+    border-color: var(--paper);
+  }
+
+  /* Third or fourth action: no fill until hover. */
+  .btn-ghost {
+    background-color: transparent;
+    color: var(--ink);
+    padding-inline: var(--space-3);
+  }
+
+  .btn-ghost:hover {
+    background-color: var(--linen);
+  }
+
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  /* ==========================================================================
+     SURFACES — white or linen, hairline border, never a shadow
+     ========================================================================== */
+
+  .card {
+    background-color: var(--surface-card);
+    border: 1px solid var(--ink-08);
+    border-radius: var(--radius-card);
+    padding: var(--card-padding);
+  }
+
+  .card-linen {
+    background-color: var(--surface-soft);
+    border: 1px solid var(--ink-08);
+    border-radius: var(--radius-card);
+    padding: var(--card-padding);
+  }
+
+  .card-graphite {
+    background-color: var(--surface-inverse);
+    color: var(--paper);
+    border-radius: var(--radius-card);
+    padding: var(--card-padding);
+  }
+
+  .card-bare {
+    background-color: transparent;
+    border-radius: var(--radius-card);
+    padding: 0;
+  }
+
+  .inset {
+    background-color: var(--linen);
+    border: 1px solid var(--ink-08);
+    border-radius: var(--radius-sm);
+    padding: var(--space-4);
+  }
+
+  .hairline {
+    border: 0;
+    border-top: 1px solid var(--ink-08);
+  }
+
+  .hairline-invert {
+    border: 0;
+    border-top: 1px solid var(--paper-16);
+  }
+
+  /* warm metadata tag: ambient apricot, never the action honey */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-card);
+    background-color: var(--apricot);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-caption);
+    line-height: var(--leading-caption);
+    letter-spacing: var(--tracking-caption);
+  }
+
+  .tag-outline {
+    background-color: transparent;
+    border: 1px solid var(--ink-16);
+  }
+
+  /* ==========================================================================
+     LISTS — hairline rows with a linen hover
+     ========================================================================== */
+
+  .row {
+    display: block;
+    border-radius: var(--radius-sm);
+    transition: background-color 150ms var(--ease-enter);
+  }
+
+  .row:hover {
+    background-color: var(--linen);
+  }
+
+  /* ==========================================================================
+     FORMS — white fields, 12px corners, hairline border
+     ========================================================================== */
+
+  .label {
+    display: block;
+    font-family: var(--font-sans);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-caption);
+    line-height: var(--leading-caption);
+    letter-spacing: var(--tracking-caption);
+    color: var(--slate);
+  }
+
+  .input {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 14px;
+    background-color: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--ink-16);
+    border-radius: var(--radius-card);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    letter-spacing: var(--tracking-body);
+    transition: border-color var(--duration-fast) var(--ease-enter);
+  }
+
+  .input::placeholder {
+    color: var(--slate);
+  }
+
+  .input:hover {
+    border-color: var(--ink-40);
+  }
+
+  .input:focus-visible {
+    border-color: var(--ink);
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  /* Leading-icon field. The icon sits in its own cell so the input carries
+     no fixed left padding and never needs an off-scale utility. */
+  .field {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 44px;
+    padding-inline: var(--space-3) var(--space-2);
+    background-color: var(--paper);
+    border: 1px solid var(--ink-16);
+    border-radius: var(--radius-card);
+    transition: border-color var(--duration-fast) var(--ease-enter);
+  }
+
+  .field .input {
+    min-height: 0;
+    padding-inline: 0;
+    background-color: transparent;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .field .input:focus-visible {
+    outline: none;
+  }
+
+  .field:has(.input:focus-visible) {
+    border-color: var(--ink);
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  .error {
+    border-left: 2px solid var(--ink);
+    padding-left: var(--space-3);
+    color: var(--ink);
+  }
+
+  /* ==========================================================================
+     AVATAR + CHECKBOX
+     ========================================================================== */
+
+  .avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--ink-08);
+    border-radius: var(--radius-round);
+    background-color: var(--linen);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-weight: var(--weight-medium);
+    font-size: 10px;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  .checkbox {
+    appearance: none;
+    flex: none;
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    background-color: transparent;
+    border: 1.5px solid var(--ink-40);
+    border-radius: var(--radius-tiny);
+    display: grid;
+    place-items: center;
+    transition: background-color 150ms var(--ease-enter),
+      border-color 150ms var(--ease-enter);
+  }
+
+  .checkbox:checked {
+    background-color: var(--graphite);
+    border-color: var(--graphite);
+  }
+
+  .checkbox-hit {
+    display: inline-grid;
+    place-items: center;
+    min-width: 44px;
+    min-height: 44px;
+    margin-left: calc(var(--space-3) * -1);
+    cursor: pointer;
+  }
+
+  /* ==========================================================================
+     SKELETON — flat linen blocks, slow opacity pulse, no shimmer
+     ========================================================================== */
+
+  .skeleton {
+    background-color: var(--linen);
+    border: 1px solid var(--ink-08);
+    border-radius: var(--radius-sm);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .skeleton-pulse {
+      animation: baithak-breathe 1600ms ease-in-out infinite;
+    }
+  }
+
+  @keyframes baithak-breathe {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.55;
+    }
+  }
+
+  /* ==========================================================================
+     ENTRANCE
+     CSS owns the hero entrance so the copy is never waiting on JavaScript.
+     The base state is visible; the animation only runs when motion is allowed.
+     ========================================================================== */
+
+  @media (prefers-reduced-motion: no-preference) {
+    .rise {
+      animation: baithak-rise 700ms var(--ease-enter) both;
+    }
+
+    .rise-2 {
+      animation-delay: 80ms;
+    }
+
+    .rise-3 {
+      animation-delay: 160ms;
+    }
+  }
+
+  @keyframes baithak-rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hero-title-line {
+    display: block;
+    overflow: hidden;
+    padding-block: 0.04em;
+    margin-block: -0.04em;
+  }
+
+  .hero-title-line-inner {
+    display: block;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-title-line-inner {
+      animation: baithak-title-reveal 950ms var(--ease-enter) both;
+    }
+
+    .hero-title-line:nth-child(2) .hero-title-line-inner {
+      animation-delay: 140ms;
+    }
+  }
+
+  @keyframes baithak-title-reveal {
+    from {
+      opacity: 0;
+      filter: blur(7px);
+      transform: translateY(105%);
+    }
+    to {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0);
+    }
+  }
+
+  /* Scroll-linked reveals add depth without changing the paper-flat surfaces.
+     Unsupported browsers keep the fully visible server-rendered content. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .page > section:not(:first-child) {
+        animation: baithak-section-reveal linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 38%;
+      }
+
+      .page #product article.card,
+      .page [aria-labelledby="closing-heading"] .card {
+        animation: baithak-card-reveal linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 45%;
+      }
+
+      .page [aria-labelledby="features-heading"] article {
+        animation: baithak-card-reveal linear both;
+        animation-timeline: view();
+      }
+
+      .page [aria-labelledby="features-heading"] article:nth-child(1) {
+        animation-range: entry 0% entry 48%;
+      }
+
+      .page [aria-labelledby="features-heading"] article:nth-child(2) {
+        animation-range: entry 8% entry 56%;
+      }
+
+      .page [aria-labelledby="features-heading"] article:nth-child(3) {
+        animation-range: entry 16% entry 64%;
+      }
+    }
+  }
+
+  @keyframes baithak-section-reveal {
+    from {
+      opacity: 0.72;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes baithak-card-reveal {
+    from {
+      opacity: 0.72;
+      transform: translateY(16px) scale(0.99);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* ==========================================================================
+     SCROLL CUE — circular paper affordance at the foot of the hero
+     ========================================================================== */
+
+  .scroll-cue {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--ink);
+    border-radius: var(--radius-round);
+    background-color: var(--paper);
+    color: var(--ink);
+    transition: background-color 150ms var(--ease-enter);
+  }
+
+  .scroll-cue:hover {
+    background-color: var(--linen);
+  }
+
+  /* ==========================================================================
+     AUDIO LEVEL INDICATOR — one thin ink line, scaleX only
+     ========================================================================== */
+
+  .level-line {
+    width: 100%;
+    height: 2px;
+    background-color: var(--ink-08);
+    border-radius: var(--radius-round);
+    overflow: hidden;
+  }
+
+  .level-fill {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform-origin: left center;
+    background-color: var(--ink);
+    border-radius: var(--radius-round);
+  }
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   Left unlayered on purpose: it has to beat every transition above it.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
