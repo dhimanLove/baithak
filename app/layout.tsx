@@ -6,6 +6,7 @@ import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import { ChromeProvider } from "@/components/layout/ChromeContext";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import { RouteTransition } from "@/components/motion/RouteTransition";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const inter = Inter({
@@ -51,6 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <SiteFooter />
           </ChromeProvider>
         </MotionProvider>
+        <Analytics />
       </body>
     </html>
   );
